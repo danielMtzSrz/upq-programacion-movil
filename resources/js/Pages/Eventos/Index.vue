@@ -2,7 +2,7 @@
     <GenericLayout titleModule="Eventos">
         <template #content>
             <DynamicTable
-                :data="users"
+                :data="eventos"
                 :items="items"
                 titleModule="Eventos"
             >
@@ -46,9 +46,7 @@
                 :data_modal="{
                     display: display_create_update,
                     data_registro: data_registro,
-                    data_generos: generos,
-                    data_tipos_sangre: tipos_sangre,
-                    data_estados_civiles: estados_civiles
+                    data_usuarios: usuarios,
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
             />
@@ -99,6 +97,10 @@ const props = defineProps({
         type: Object,
         default: null
     },
+    usuarios: {
+        type: Object,
+        default: null
+    }
 })
 
 // Array-Object para los items del DataTable

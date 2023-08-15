@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Eventos;
+use App\Models\User;
 
 use Inertia\Inertia;
 
@@ -15,13 +16,21 @@ class EventosController extends Controller
     public function index(Request $request)
     {
         $eventos = Eventos::all();
+        $usuarios = User::get()->map(function($user){
+            return [
+                'id' => $user->id,
+                'nombre' => $user->name." ".$user->apellido_paterno." ".$user->apellido_materno
+            ];
+        });
 
-        return Inertia::render('Eventos/Index', compact('eventos'));
+        return Inertia::render('Eventos/Index', compact('eventos', 'usuarios'));
     }
 
     public function store(Request $request)
     {
         $input = $request->all();
+
+        // dd($input);
 
         $evento = Eventos::create([
             "id_usuario" => $input["id_usuario"],
@@ -49,8 +58,6 @@ class EventosController extends Controller
         // dd($request->all());
 
         $input = $request->all();
-
-        dd($input);
 
         if($request->file('profile_photo_path')){
             Storage::disk('public')->delete($eventos->profile_photo_path);

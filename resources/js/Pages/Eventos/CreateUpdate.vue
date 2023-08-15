@@ -7,6 +7,16 @@
         <template #content>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                     <div class="row col-12 pt-4">
+
+                        <div class="col-sm-12 col-md-6">
+                            <Dropdown 
+                                label="Encargado del evento"
+                                :data="data_modal.data_usuarios"
+                                textDropdown="nombre"
+                                v-model="usuario_seleccionado"
+                            />
+                        </div>
+
                         <div class="col-sm-12 col-md-8">
                             <InputText
                                 label="Nombre del evento"
@@ -17,8 +27,8 @@
                         </div>
 
                         <div class="flex align-items-center mb-4 col-sm-12 col-md-4">
-                            <Checkbox v-model="form.pertenece_comunidad_indigena" :binary="true" />
-                            <label class="ml-2">Estatus: {{ form.pertenece_comunidad_indigena ? 'Activo' : 'Inactivo' }} </label>
+                            <Checkbox v-model="form.status" :binary="true" />
+                            <label class="ml-2">Estatus: {{ form.status ? 'Activo' : 'Inactivo' }} </label>
                         </div>
 
                         <div class="col-sm-12">
@@ -44,7 +54,8 @@
                                 label="Fecha del evento"
                                 name="fecha_evento"
                                 :errors="form.errors.fecha_evento"
-                                v-model="form.fecha_evento"
+                                :value="mostrar_fecha_evento"
+                                @input="form.fecha_evento = $event.valueFormat, mostrar_fecha_evento = $event.valueShow"
                             />
                         </div>
 
@@ -114,6 +125,9 @@ import Textarea from "@/Components/Forms/Textarea.vue";
 
 const imagenActual = ref(null)
 
+const mostrar_fecha_evento = ref(null),
+      usuario_seleccionado = ref(null)
+
 const form = useForm({
     _method: null,
     
@@ -154,7 +168,8 @@ const submit = () => {
     if (!props.data_modal.data_registro) {
         form.transform((data) => ({
             ...data,
-            sexo : genero_seleccionado.value?.id,
+            id_usuario : usuario_seleccionado.value?.id,
+            status: form.status ? 1 : 0
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
