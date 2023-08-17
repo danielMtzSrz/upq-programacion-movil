@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\ListaAsistencia;
 use App\Models\Eventos;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Auth;
 
-class EventosController extends Controller
+class ListaAsistenciaController extends Controller
 {
 
     public function index(Request $request)
@@ -34,30 +35,10 @@ class EventosController extends Controller
     {
         $input = $request->all();
 
-        // dd($input);
-
-        $evento = Eventos::create([
-            "id_usuario" => $input["id_usuario"],
-            "nombre" => $input["nombre"],
-            "descripcion" => $input["descripcion"],
-            "ubicacion" => $input["ubicacion"],
-            "fecha_evento" => $input["fecha_evento"],
-            "capacidad" => $input["capacidad"],
-            "registrados" => $input["registrados"],
-            "status" => $input["status"],
+        $evento = ListaAsistencia::create([
+            "id_usuario" => Auth::user()->id,
+            "id_evento" => $input["id"],
         ]);
-
-        $evento_url = "evento/$evento->id";
-
-        $evento_qr_name = $evento->id . "-" . str_replace(' ', '', $evento->nombre);
-
-        QrCode::generate($evento_url, public_path("images/eventos/$evento_qr_name.svg"));
-
-        // Cargar imagen
-        if($request->file('fotografia')){
-            $evento->fotografia = $request->file('fotografia')->store('fotografia', 'public');
-            $evento->save();
-        }
 
         return back()->with(config('messages.mensaje_exito'));
         
@@ -67,7 +48,7 @@ class EventosController extends Controller
     {
         $input = $request->all();
 
-        $eventos = Eventos::find($input['id']);
+        $eventos = ListaAsistencia::find($input['id']);
 
         if($request->file('fotografia')){
             Storage::disk('public')->delete($eventos->fotografia);

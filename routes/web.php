@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\{UserController, RoleController, PermissionController, EventosController};
+use App\Http\Controllers\{UserController, RoleController, PermissionController, EventosController, ListaAsistenciaController};
 
 use Inertia\Inertia;
 
@@ -18,4 +18,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('eventos', EventosController::class);
+    Route::resource('listaasistencia', ListaAsistenciaController::class);
 });

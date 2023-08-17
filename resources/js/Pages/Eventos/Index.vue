@@ -33,9 +33,24 @@
                             display: true, 
                             proceso: {
                                 'proceso': 'delete',
-                                'ruta': 'user.destroy',
+                                'ruta': 'eventos.destroy',
                             }
                         })"
+                    />
+                    <Button
+                        type="button"
+                        icon="pi pi-check"
+                        class="p-button-success p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenericAlert({
+                            data: {id: data.id}, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'restore',
+                                'ruta': 'listaasistencia.store',
+                                'extra_info': '¿Seguroo que te quieres unir al evento?'
+                            }
+                        })"
+                        v-tooltip="'Unirme al evento'"
                     />
                 </template>
             </DynamicTable>

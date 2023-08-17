@@ -8,7 +8,7 @@
             <form @submit.prevent="submit" enctype="multipart/form-data">
                     <div class="row col-12 pt-4">
 
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12">
                             <Dropdown 
                                 label="Encargado del evento"
                                 :data="data_modal.data_usuarios"
@@ -131,6 +131,7 @@ const mostrar_fecha_evento = ref(null),
 const form = useForm({
     _method: null,
     
+    id: null,
     id_usuario: null,
     nombre: null,
     descripcion: null,
@@ -179,7 +180,8 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            sexo : genero_seleccionado.value?.id,
+            id_usuario : usuario_seleccionado.value?.id,
+            status: form.status ? 1 : 0
         })).put(route(ruta.value, props.data_modal.data_registro), {
             onSuccess: () => {
                 closeModal();
@@ -201,6 +203,7 @@ watch(() => props.data_modal.data_registro, (newVal) => {
 
     form._method = newVal ? "put" : null
 
+    form.id = newVal?.id ?? null
     form.id_usuario = newVal?.id_usuario ?? null
     form.nombre = newVal?.nombre ?? null
     form.descripcion = newVal?.descripcion ?? null
@@ -208,11 +211,12 @@ watch(() => props.data_modal.data_registro, (newVal) => {
     form.fecha_evento = newVal?.fecha_evento ?? null
     form.capacidad = newVal?.capacidad ?? null
     form.registrados = newVal?.registrados ?? null
-    form.status = newVal?.status ?? null
+    form.status = newVal?.status ? true : false
     form.fotografia = newVal?.fotografia ?? null
     imagenActual.value = newVal?.fotografia ?? null
+    mostrar_fecha_evento.value = newVal?.fecha_evento ?? null
     
-    // genero_seleccionado.value = generos.value.find(el => el.id = newVal?.sexo) 
+    usuario_seleccionado.value = props.data_modal.data_usuarios.find(el => el.id = newVal?.id_usuario) 
     
 })
 </script>

@@ -10,7 +10,7 @@
                 <span v-html="`
                         ¿Seguro que desea <strong>${alert_process?.text_alert}</strong> el registro?
                         <br>
-                        ${ data_modal?.data_proceso?.exta_info ?? '' }
+                        ${ data_modal?.data_proceso?.extra_info ?? '' }
                     `"
                 />
             </div>
