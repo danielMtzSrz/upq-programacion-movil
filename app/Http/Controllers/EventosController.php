@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 
 use App\Models\Eventos;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class EventosController extends Controller
 {
@@ -16,6 +19,7 @@ class EventosController extends Controller
     public function index(Request $request)
     {
         $eventos = Eventos::all();
+
         $usuarios = User::get()->map(function($user){
             return [
                 'id' => $user->id,
@@ -42,6 +46,12 @@ class EventosController extends Controller
             "registrados" => $input["registrados"],
             "status" => $input["status"],
         ]);
+
+        $evento_url = "evento/$evento->id";
+
+        $evento_qr_name = $evento->id . "-" . str_replace(' ', '', $evento->nombre);
+
+        QrCode::generate($evento_url, public_path("images/eventos/$evento_qr_name.svg"));
 
         // Cargar imagen
         if($request->file('fotografia')){
